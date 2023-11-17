@@ -5,5 +5,6 @@ namespace AZ204.WebApp.Services
     public interface IProductService
     {
         Task<List<Product>> GetProductsAzync();
+        Task<bool> IsBeta();
     }
 }

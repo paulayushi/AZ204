@@ -17,6 +17,7 @@ namespace AZ204.WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             var products = await _productService.GetProductsAzync();
+            ViewBag.IsBeta = await _productService.IsBeta();
             return View(products);
         }
 

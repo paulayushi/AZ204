@@ -1,10 +1,18 @@
 using AZ204.WebApp.Services;
+using Microsoft.FeatureManagement;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var conenctionString = "Endpoint=https://appconfig10005.azconfig.io;Id=QmsZ;Secret=d1OwMzZrhEi6sMzSdm6/uxk0vpPAwILK7uc9yjAGYX8=";
+builder.Host.ConfigureAppConfiguration(builder =>
+    builder.AddAzureAppConfiguration(option => 
+        option.Connect(conenctionString).UseFeatureFlags()
+    )
+);
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddFeatureManagement();
 
 var app = builder.Build();
 

@@ -1,15 +1,18 @@
 ﻿using AZ204.WebApp.Models;
 using Microsoft.Data.SqlClient;
+using Microsoft.FeatureManagement;
 
 namespace AZ204.WebApp.Services
 {
     public class ProductService: IProductService
     {
         private readonly IConfiguration _configuration;
+        private readonly IFeatureManager _featureManager;
 
-        public ProductService(IConfiguration configuration)
+        public ProductService(IConfiguration configuration, IFeatureManager featureManager)
         {
             _configuration = configuration;
+            _featureManager = featureManager;
         }
 
         public async Task<List<Product>> GetProductsAzync()
@@ -39,9 +42,14 @@ namespace AZ204.WebApp.Services
             return products;
         }
 
+        public async Task<bool> IsBeta()
+        {
+            return await _featureManager.IsEnabledAsync("Beta");
+        }
+
         private SqlConnection GetConnection()
         {
-            var builder = new SqlConnectionStringBuilder(_configuration.GetConnectionString("SqlConnection"));
+            var builder = new SqlConnectionStringBuilder(_configuration["SqlConnection"]);
             return new SqlConnection(builder.ConnectionString);
         }
     }
